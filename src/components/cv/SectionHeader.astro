@@ -1,0 +1,31 @@
+---
+import { resolveUrl } from '@utils/url';
+
+export interface Props {
+  title: string;
+  linkText?: string;
+  linkUrl?: string;
+}
+
+const { title, linkText, linkUrl } = Astro.props;
+---
+
+<div
+  class="flex items-baseline justify-between border-b border-(--global-border-color) pb-1.5"
+>
+  <h2
+    class="my-0! border-b-0! pb-0! text-xl font-bold tracking-tight text-(--global-text-color) sm:text-2xl"
+  >
+    {title}
+  </h2>
+  {
+    linkUrl && linkText && (
+      <a
+        href={resolveUrl(linkUrl)}
+        class="text-xs font-medium text-(--global-link-color) no-underline! hover:underline! sm:text-sm"
+      >
+        {linkText} &rarr;
+      </a>
+    )
+  }
+</div>

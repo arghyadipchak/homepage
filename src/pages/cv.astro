@@ -1,0 +1,234 @@
+---
+import { Icon } from 'astro-icon/components';
+
+import PageLayout from '@layouts/PageLayout.astro';
+import SectionHeader from '@components/cv/SectionHeader.astro';
+import TimelineItem from '@components/cv/TimelineItem.astro';
+
+import {
+  cvPdfUrl,
+  education,
+  honors,
+  internships,
+  service,
+  skills,
+} from '@data/cv';
+import { siteConfig } from '@data/siteConfig';
+import { parseInline } from '@utils/marked';
+import { buildProfilePageSchema } from '@utils/seo';
+
+const siteBase = Astro.site
+  ? Astro.site.toString()
+  : siteConfig.url
+    ? new URL(siteConfig.url).origin
+    : Astro.url.origin;
+const canonicalUrl = new URL(Astro.url.pathname, siteBase).toString();
+
+const profilePageSchema = buildProfilePageSchema(
+  canonicalUrl,
+  siteBase,
+  'Curriculum Vitae',
+  'Curriculum Vitae of ' + siteConfig.author.name
+);
+---
+
+<PageLayout
+  title="CV"
+  description={`Curriculum Vitae of ${siteConfig.author.name}`}
+  schemaNodes={[profilePageSchema]}
+  ogType="profile"
+  toc={false}
+>
+  <div class="cv-content space-y-8">
+    <!-- Download Banner -->
+    <div
+      class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-(--global-border-color) bg-(--global-code-background-color) px-4 py-3"
+    >
+      <div class="flex items-center gap-3">
+        <Icon name="fa6-solid:file-pdf" class="h-5 w-5 shrink-0 text-red-500" />
+        <div>
+          <span class="text-base font-semibold text-(--global-text-color)">
+            Curriculum Vitae
+          </span>
+          <span class="ml-2 text-sm text-(--global-text-color-light)">
+            (PDF Version)
+          </span>
+        </div>
+      </div>
+      <a
+        href={cvPdfUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 rounded-md border border-(--global-border-color) bg-(--global-bg-color) px-3.5 py-1.5 text-sm font-medium text-(--global-text-color)! no-underline! shadow-2xs transition hover:border-(--global-link-color) hover:text-(--global-link-color)!"
+      >
+        <Icon name="fa6-solid:download" class="h-3.5 w-3.5" />
+        <span>Download PDF</span>
+      </a>
+    </div>
+
+    <!-- Education -->
+    <section>
+      <SectionHeader title="Education" />
+      <div class="mt-4 text-(--global-text-color)">
+        {
+          education.map((item, index) => (
+            <TimelineItem
+              period={item.period}
+              isLast={index === education.length - 1}
+            >
+              <div
+                class="text-base font-semibold"
+                set:html={parseInline(item.institution)}
+              />
+              <div
+                class="text-sm text-(--global-text-color-light)"
+                set:html={parseInline(item.degree)}
+              />
+              {item.advisor && (
+                <div class="text-sm text-(--global-text-color-light)">
+                  Advisor: <span set:html={parseInline(item.advisor)} />
+                </div>
+              )}
+            </TimelineItem>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Publications -->
+    <section>
+      <SectionHeader
+        title="Publications"
+        linkText="View all publications"
+        linkUrl="/publications/"
+      />
+    </section>
+
+    <!-- Projects -->
+    <section>
+      <SectionHeader
+        title="Projects"
+        linkText="View all projects"
+        linkUrl="/portfolio/"
+      />
+    </section>
+
+    <!-- Internships -->
+    <section>
+      <SectionHeader title="Internships" />
+      <div class="mt-4 text-(--global-text-color)">
+        {
+          internships.map((item, index) => (
+            <TimelineItem
+              period={item.period}
+              isLast={index === internships.length - 1}
+            >
+              <div class="text-base font-semibold">
+                <span set:html={parseInline(item.organization)} />
+                <span class="font-normal text-(--global-text-color-light)">
+                  {' '}
+                  &ndash; <span set:html={parseInline(item.role)} />
+                </span>
+              </div>
+              {item.project && (
+                <div
+                  class="text-sm text-(--global-text-color-light)"
+                  set:html={parseInline(item.project)}
+                />
+              )}
+              {item.advisor && (
+                <div class="text-sm text-(--global-text-color-light)">
+                  Advisor: <span set:html={parseInline(item.advisor)} />
+                </div>
+              )}
+            </TimelineItem>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Talks -->
+    <section>
+      <SectionHeader
+        title="Talks"
+        linkText="View all talks"
+        linkUrl="/talks/"
+      />
+    </section>
+
+    <!-- Teaching -->
+    <section>
+      <SectionHeader
+        title="Teaching"
+        linkText="View full teaching history"
+        linkUrl="/teaching/"
+      />
+    </section>
+
+    <!-- Honors and Fellowships -->
+    <section>
+      <SectionHeader title="Honors and Fellowships" />
+      <div class="mt-4 text-(--global-text-color)">
+        {
+          honors.map((item, index) => (
+            <TimelineItem
+              period={item.period}
+              isLast={index === honors.length - 1}
+            >
+              <div class="text-base">
+                <strong set:html={parseInline(item.title)} />
+                {item.institution && (
+                  <>
+                    , <span set:html={parseInline(item.institution)} />
+                  </>
+                )}
+              </div>
+            </TimelineItem>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Academic Service and Leadership -->
+    <section>
+      <SectionHeader title="Academic Service and Leadership" />
+      <div class="mt-4 text-(--global-text-color)">
+        {
+          service.map((item, index) => (
+            <TimelineItem
+              period={item.period}
+              isLast={index === service.length - 1}
+            >
+              <div class="text-base">
+                <strong set:html={parseInline(item.role)} />,{' '}
+                <span set:html={parseInline(item.event)} />
+                {item.institution && (
+                  <>
+                    , <span set:html={parseInline(item.institution)} />
+                  </>
+                )}
+              </div>
+            </TimelineItem>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Skills -->
+    <section>
+      <SectionHeader title="Skills" />
+      <div
+        class="mt-3.5 space-y-2 text-base leading-relaxed text-(--global-text-color)"
+      >
+        {
+          skills.map((skillGroup) => (
+            <div>
+              <strong set:html={parseInline(skillGroup.category)} />:{' '}
+              <span set:html={parseInline(skillGroup.skills.join(', '))} />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</PageLayout>

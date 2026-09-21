@@ -1,0 +1,31 @@
+---
+export interface Props {
+  period: string;
+  isLast?: boolean;
+}
+
+const { period, isLast = false } = Astro.props;
+---
+
+<div class="relative flex flex-col sm:flex-row sm:items-start sm:gap-6">
+  <div
+    class="hidden text-sm font-medium text-(--global-text-color-light) sm:block sm:w-36 sm:shrink-0 sm:pt-0.5 sm:text-right"
+  >
+    {period}
+  </div>
+  <div
+    class:list={[
+      'relative ml-1.5 flex-1 border-l-2 border-(--global-dark-border-color) pl-5 sm:ml-0',
+      isLast ? 'pb-1' : 'pb-6',
+    ]}
+  >
+    <div
+      class="absolute top-1.5 -left-1.5 h-2.5 w-2.5 rounded-full border-2 border-(--global-dark-border-color) bg-(--global-bg-color)"
+    >
+    </div>
+    <div class="mb-0.5 text-sm text-(--global-text-color-light) sm:hidden">
+      {period}
+    </div>
+    <slot />
+  </div>
+</div>
