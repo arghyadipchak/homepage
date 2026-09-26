@@ -2,19 +2,21 @@ name: CI
 
 on:
   push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read
-  deployments: write
 
 jobs:
-  deploy:
-    name: Build, Verify & Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -22,7 +24,7 @@ jobs:
         uses: actions/checkout@v7
 
       - name: Setup pnpm
-        uses: pnpm/setup@v2
+        uses: pnpm/setup@v3
         with:
           version: ^12.0.0
           runtime: node@lts
@@ -31,8 +33,44 @@ jobs:
       - name: Run verification
         run: pnpm verify
 
-      - name: Build production bundle
+      - name: Build site
         run: pnpm build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        if: github.event_name != 'pull_request'
+        with:
+          name: dist
+          path: dist/
+          retention-days: 1
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+
+    if: github.event_name != 'pull_request'
+
+    permissions:
+      deployments: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Download dist artifact
+        uses: actions/download-artifact@v7
+        with:
+          name: dist
+          path: dist
+
+      - name: Setup pnpm
+        uses: pnpm/setup@v3
+        with:
+          version: ^12.0.0
+          runtime: node@lts
+          cache: true
+          install: false
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v4
