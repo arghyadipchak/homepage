@@ -67,27 +67,29 @@ export const internships: InternshipItem[] = [
     organization: 'National University of Singapore (NUS)',
     role: 'Research Intern',
     project:
-      '[Modular MAC Scheduling in OpenAirInterface 5G RAN](/portfolio/mac-scheduling/)',
+      '[Modular MAC Scheduling in OpenAirInterface 5G RAN](/portfolio/2025-mac-scheduling/)',
     advisor: '[Prof. Chan Mun Choon](https://www.comp.nus.edu.sg/~chanmc/)',
   },
   {
     period: 'Summer 2024',
     organization: 'Subconscious Compute',
     role: 'Systems Engineering Intern',
-    project: '[Shepherd Browser Extension](/portfolio/shepherd-extension/)',
+    project:
+      '[Shepherd Browser Extension](/portfolio/2024-shepherd-extension/)',
   },
   {
     period: 'Summer 2023',
     organization: 'Subconscious Compute',
     role: 'Systems Engineering Intern',
-    project: '[Summer at Subconscious Compute](/portfolio/summer-at-subcom/)',
+    project:
+      '[Summer at Subconscious Compute](/portfolio/2023-summer-at-subcom/)',
   },
   {
     period: 'Summer 2022',
     organization: 'Willis Towers Watson',
     role: 'Software Engineering Intern',
     project:
-      '[Automated Ticket Classification & Triaging](/portfolio/ticket-classification/)',
+      '[Automated Ticket Classification & Triaging](/portfolio/2022-ticket-classification/)',
   },
 ];
 
