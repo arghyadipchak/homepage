@@ -24,7 +24,7 @@ const { title, linkText, linkUrl } = Astro.props;
         href={resolveUrl(linkUrl)}
         class="text-xs font-medium text-(--global-link-color) no-underline! hover:underline! sm:text-sm"
       >
-        {linkText} &rarr;
+        {linkText} <span aria-hidden="true">&rarr;</span>
       </a>
     )
   }

@@ -16,7 +16,7 @@ import {
 import { siteConfig } from '@data/siteConfig';
 import { parseInline } from '@utils/marked';
 import { buildProfilePageSchema } from '@utils/seo';
-import { getSiteUrls } from '@utils/url';
+import { getSiteUrls, resolveUrl } from '@utils/url';
 
 const { siteBase, canonicalUrl } = getSiteUrls(Astro.url, Astro.site);
 
@@ -36,9 +36,8 @@ const profilePageSchema = buildProfilePageSchema(
   toc={false}
 >
   <div class="cv-content space-y-8">
-    <!-- Download Banner -->
     <div
-      class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-(--global-border-color) bg-(--global-code-background-color) px-4 py-3"
+      class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-(--global-border-color) bg-(--global-footer-bg-color) px-4 py-3 print:hidden"
     >
       <div class="flex items-center gap-3">
         <Icon name="fa6-solid:file-pdf" class="h-5 w-5 shrink-0 text-red-500" />
@@ -52,7 +51,7 @@ const profilePageSchema = buildProfilePageSchema(
         </div>
       </div>
       <a
-        href={cvPdfUrl}
+        href={resolveUrl(cvPdfUrl)}
         target="_blank"
         rel="noopener noreferrer"
         class="inline-flex items-center gap-2 rounded-md border border-(--global-border-color) bg-(--global-bg-color) px-3.5 py-1.5 text-sm font-medium text-(--global-text-color)! no-underline! shadow-2xs transition hover:border-(--global-link-color) hover:text-(--global-link-color)!"
@@ -62,7 +61,6 @@ const profilePageSchema = buildProfilePageSchema(
       </a>
     </div>
 
-    <!-- Education -->
     <section>
       <SectionHeader title="Education" />
       <div class="mt-4 text-(--global-text-color)">
@@ -91,7 +89,6 @@ const profilePageSchema = buildProfilePageSchema(
       </div>
     </section>
 
-    <!-- Publications -->
     <section>
       <SectionHeader
         title="Publications"
@@ -100,7 +97,6 @@ const profilePageSchema = buildProfilePageSchema(
       />
     </section>
 
-    <!-- Projects -->
     <section>
       <SectionHeader
         title="Projects"
@@ -109,7 +105,6 @@ const profilePageSchema = buildProfilePageSchema(
       />
     </section>
 
-    <!-- Internships -->
     <section>
       <SectionHeader title="Internships" />
       <div class="mt-4 text-(--global-text-color)">
@@ -143,7 +138,6 @@ const profilePageSchema = buildProfilePageSchema(
       </div>
     </section>
 
-    <!-- Talks -->
     <section>
       <SectionHeader
         title="Talks"
@@ -152,7 +146,6 @@ const profilePageSchema = buildProfilePageSchema(
       />
     </section>
 
-    <!-- Teaching -->
     <section>
       <SectionHeader
         title="Teaching"
@@ -161,7 +154,6 @@ const profilePageSchema = buildProfilePageSchema(
       />
     </section>
 
-    <!-- Honors and Fellowships -->
     <section>
       <SectionHeader title="Honors and Fellowships" />
       <div class="mt-4 text-(--global-text-color)">
@@ -185,7 +177,6 @@ const profilePageSchema = buildProfilePageSchema(
       </div>
     </section>
 
-    <!-- Academic Service and Leadership -->
     <section>
       <SectionHeader title="Academic Service and Leadership" />
       <div class="mt-4 text-(--global-text-color)">
@@ -210,7 +201,6 @@ const profilePageSchema = buildProfilePageSchema(
       </div>
     </section>
 
-    <!-- Skills -->
     <section>
       <SectionHeader title="Skills" />
       <div
