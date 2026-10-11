@@ -16,13 +16,9 @@ import {
 import { siteConfig } from '@data/siteConfig';
 import { parseInline } from '@utils/marked';
 import { buildProfilePageSchema } from '@utils/seo';
+import { getSiteUrls } from '@utils/url';
 
-const siteBase = Astro.site
-  ? Astro.site.toString()
-  : siteConfig.url
-    ? new URL(siteConfig.url).origin
-    : Astro.url.origin;
-const canonicalUrl = new URL(Astro.url.pathname, siteBase).toString();
+const { siteBase, canonicalUrl } = getSiteUrls(Astro.url, Astro.site);
 
 const profilePageSchema = buildProfilePageSchema(
   canonicalUrl,

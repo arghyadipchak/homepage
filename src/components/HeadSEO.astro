@@ -1,12 +1,13 @@
 ---
 import { siteConfig } from '@data/siteConfig';
+import { resolveThemes } from '@data/themes';
 import type { CitationMetadata, SchemaOrgNode } from '@utils/seo';
 import {
   buildPersonSchema,
   buildScholarlyArticleSchema,
   buildWebSiteSchema,
 } from '@utils/seo';
-import { resolveUrl } from '@utils/url';
+import { getSiteUrls, resolveUrl, stripBasePath } from '@utils/url';
 
 export interface Props {
   title?: string;
@@ -37,20 +38,17 @@ const xHandle = siteConfig.author.x
       .split('/')[0]
   : undefined;
 
-const siteBase = Astro.site
-  ? Astro.site.toString()
-  : siteConfig.url
-    ? new URL(siteConfig.url).origin
-    : Astro.url.origin;
-
-const canonicalUrl =
-  propCanonicalUrl || new URL(Astro.url.pathname, siteBase).toString();
+const { siteBase, canonicalUrl: defaultCanonicalUrl } = getSiteUrls(
+  Astro.url,
+  Astro.site
+);
+const canonicalUrl = propCanonicalUrl || defaultCanonicalUrl;
 
 const pageTitle = title
   ? `${title} ${siteConfig.titleSeparator} ${siteConfig.title}`
   : siteConfig.title;
 
-const pathname = Astro.url.pathname.replace(/^\/|\/$/g, '');
+const pathname = stripBasePath(Astro.url.pathname).replace(/^\/|\/$/g, '');
 const ogFallback = pathname ? `/og/${pathname}.svg` : '/og/default.svg';
 const effectiveImage = image || ogFallback;
 
@@ -58,14 +56,10 @@ const resolvedImage = effectiveImage.startsWith('http')
   ? effectiveImage
   : new URL(resolveUrl(effectiveImage), siteBase).toString();
 
-const resolvedAvatar = siteConfig.author.avatar.startsWith('http')
-  ? siteConfig.author.avatar
-  : new URL(resolveUrl(siteConfig.author.avatar), siteBase).toString();
-
 const personSchema = buildPersonSchema(
   siteBase,
   siteConfig.author,
-  resolvedAvatar
+  siteConfig.author.avatar
 );
 const webSiteSchema = buildWebSiteSchema(siteBase);
 
@@ -85,21 +79,19 @@ const jsonLdGraph: SchemaOrgNode[] = [
   ...(scholarlyArticleSchema ? [scholarlyArticleSchema] : []),
   ...schemaNodes,
 ];
+
+const {
+  light: lightTheme,
+  dark: darkTheme,
+  css: themeCss,
+} = resolveThemes(siteConfig.theme);
 ---
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta
-  name="theme-color"
-  content="#ffffff"
-  media="(prefers-color-scheme: light)"
-/>
-<meta
-  name="theme-color"
-  content="#282c34"
-  media="(prefers-color-scheme: dark)"
-/>
+<meta name="theme-color" content={lightTheme.bg} />
+<style is:inline set:html={themeCss}></style>
 <link rel="icon" type="image/x-icon" href={resolveUrl('/favicon.ico')} />
 <link rel="icon" type="image/svg+xml" href={resolveUrl('/favicon.svg')} />
 <link
@@ -196,21 +188,50 @@ const jsonLdGraph: SchemaOrgNode[] = [
   })}
 />
 <!-- Dark Mode Initialization Script (Prevents flash of unstyled theme) -->
-<script is:inline>
-  function applyTheme() {
-    const storedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia(
-      '(prefers-color-scheme: dark)'
-    ).matches;
-    if (storedTheme === 'dark' || (!storedTheme && prefersDark)) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.classList.remove('dark');
+<script
+  is:inline
+  define:vars={{
+    lightBg: lightTheme.bg,
+    darkBg: darkTheme.bg,
+    hasPicker: Boolean(siteConfig.theme?.picker),
+  }}
+>
+  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  function applyTheme(explicitTheme, notify) {
+    if (explicitTheme) localStorage.setItem('theme', explicitTheme);
+    const storedTheme = explicitTheme || localStorage.getItem('theme');
+    const isDark =
+      storedTheme === 'dark' || (!storedTheme && darkQuery.matches);
+    const theme = isDark ? 'dark' : 'light';
+    const root = document.documentElement;
+    root.setAttribute('data-theme', theme);
+    if (hasPicker) {
+      const lp = localStorage.getItem('theme-light-preset');
+      const dp = localStorage.getItem('theme-dark-preset');
+      if (lp) root.setAttribute('data-light-preset', lp);
+      else root.removeAttribute('data-light-preset');
+      if (dp) root.setAttribute('data-dark-preset', dp);
+      else root.removeAttribute('data-dark-preset');
     }
+    const activeBg = hasPicker
+      ? getComputedStyle(root).getPropertyValue('--global-bg-color').trim()
+      : '';
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', activeBg || (isDark ? darkBg : lightBg));
+    if (explicitTheme || notify) {
+      document.dispatchEvent(
+        new CustomEvent('theme-change', { detail: { theme } })
+      );
+    }
+
+    return theme;
   }
 
+  window.__applyTheme = applyTheme;
   applyTheme();
-  document.addEventListener('astro:after-swap', applyTheme);
+  darkQuery.addEventListener('change', () => {
+    if (!localStorage.getItem('theme')) applyTheme(undefined, true);
+  });
+  document.addEventListener('astro:after-swap', () => applyTheme());
 </script>

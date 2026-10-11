@@ -1,7 +1,7 @@
 {
   "name": "homepage",
   "description": "Academic website of Arghyadip Chakraborty",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "author": "Arghyadip Chakraborty<dev@arghyac.com>",
   "license": "MIT",
   "type": "module",

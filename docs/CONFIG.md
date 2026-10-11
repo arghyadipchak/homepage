@@ -15,6 +15,10 @@ export const siteConfig: SiteConfig = {
   titleSeparator: '-',
   description: "Your Name's Academic Portfolio",
   url: 'https://username.github.io',
+  theme: {
+    light: 'default',
+    dark: 'default',
+  },
   breadcrumbs: true,
   author: {
     avatar: '/images/profile.png',
@@ -40,15 +44,25 @@ export const siteConfig: SiteConfig = {
 
 ### Core Site Settings
 
-| Property                | Type                                | Default    | Description                                                                                           |
-| :---------------------- | :---------------------------------- | :--------- | :---------------------------------------------------------------------------------------------------- |
-| `locale`                | `string`                            | `'en-US'`  | Site language/locale code used in HTML `lang` attributes and RSS feeds                                |
-| `title`                 | `string`                            | Required   | Brand name displayed in masthead and SEO head tags                                                    |
-| `titleSeparator`        | `string`                            | `'-'`      | Separator between page title and brand in browser tabs (e.g. `CV - Jane Doe`)                         |
-| `description`           | `string`                            | Required   | Default fallback description for OpenGraph, Twitter cards, and search engine snippets                 |
-| `url`                   | `string`                            | Required   | Production deployment URL (e.g. `https://username.github.io` or `https://username.github.io/my-site`) |
-| `breadcrumbs`           | `boolean`                           | `true`     | Toggles breadcrumb trail navigation at the top of archive and single pages                            |
-| `publicationCategories` | `Record<string, { title: string }>` | Standard 3 | Defines category filter tabs on `/publications/` (`books`, `journals`, `conferences`)                 |
+| Property                | Type                                | Default                                 | Description                                                                                                    |
+| :---------------------- | :---------------------------------- | :-------------------------------------- | :------------------------------------------------------------------------------------------------------------- |
+| `locale`                | `string`                            | `'en-US'`                               | Site language/locale code used in HTML `lang` attributes and RSS feeds                                         |
+| `title`                 | `string`                            | Required                                | Brand name displayed in masthead and SEO head tags                                                             |
+| `titleSeparator`        | `string`                            | `'-'`                                   | Separator between page title and brand in browser tabs (e.g. `CV - Jane Doe`)                                  |
+| `description`           | `string`                            | Required                                | Default fallback description for OpenGraph, Twitter cards, and search engine snippets                          |
+| `url`                   | `string`                            | Required                                | Production deployment URL (e.g. `https://username.github.io` or `https://username.github.io/my-site`)          |
+| `theme`                 | `ThemeConfig`                       | `{ light: 'default', dark: 'default' }` | Independent light and dark presets or partial custom palette objects (see [Color Themes](#color-themes-theme)) |
+| `breadcrumbs`           | `boolean`                           | `true`                                  | Toggles breadcrumb trail navigation at the top of archive and single pages                                     |
+| `publicationCategories` | `Record<string, { title: string }>` | Standard 3                              | Defines category filter tabs on `/publications/` (`books`, `journals`, `conferences`)                          |
+
+### Color Themes (`theme`)
+
+Defined in [`src/data/themes.ts`](../src/data/themes.ts), `theme.light` and `theme.dark` can be configured independently using a built-in preset name or a partial custom palette (`Partial<ThemePalette>`):
+
+- **Light Presets**: `'default'` | `'github-light'` | `'one-light'` | `'catppuccin-latte'` | `'alucard'` | `'tokyo-night-day'` | `'solarized-light'` | `'nord-light'` | `'gruvbox-light'` | `'monokai-light'` | `'rose-pine-dawn'` | `'light-owl'` | `'ayu-light'` | `'kanagawa-lotus'` | `'everforest-light'` | `'flexoki-light'`
+- **Dark Presets**: `'default'` | `'github-dark'` | `'one-dark'` | `'catppuccin-mocha'` | `'dracula'` | `'tokyo-night'` | `'solarized-dark'` | `'nord'` | `'gruvbox-dark'` | `'monokai'` | `'rose-pine'` | `'night-owl'` | `'ayu-dark'` | `'kanagawa-wave'` | `'everforest-dark'` | `'flexoki-dark'`
+- **Custom Overrides**: Pass any subset of the 5 core tokens (`{ base, bg, surface, text, textLight }`); omitted fields inherit from `'default'` and secondary tokens (borders, code blocks, links) auto-derive via CSS `color-mix()`
+- **Interactive Theme Picker (`theme.picker`)**: Enabled (`true`) in the starter template so visitors can preview all 32 presets in the masthead; set to `false` or remove `picker` on personal sites so only your configured `light` and `dark` palettes are shipped
 
 ### Author Profile Fields (`author`)
 
@@ -69,8 +83,8 @@ All platform handles accept either a bare username/ID or a complete URL (e.g. `'
 
 - `googlescholar`: Google Scholar user ID or full profile URL
 - `orcid`: ORCID 16-digit ID (e.g. `'0000-0000-0000-0000'`) or full URL
-- `arxiv`: arXiv author ID or search query
-- `dblp`: DBLP author PID (e.g. `'pid/123/4567'`) or URL
+- `arxiv`: arXiv author ID (e.g. `'doe_j_1'`) or full URL
+- `dblp`: DBLP author PID (e.g. `'123/4567'`) or full URL
 - `huggingface`: Hugging Face profile username or URL
 - `ieee`: IEEE Xplore author profile URL or ID
 - `acm`: ACM Digital Library author profile URL or ID
@@ -101,7 +115,7 @@ All platform handles accept either a bare username/ID or a complete URL (e.g. `'
 - `mastodon`: Full instance URL (e.g. `'https://mastodon.social/@username'`)
 - `medium`: Medium handle or publication URL
 - `substack`: Substack handle or publication URL
-- `discord`, `youtube`, `telegram`, `threads`, `facebook`, `instagram`, `keybase`, `reddit`, `weibo`, `wikipedia`, `zhihu`
+- `artstation`, `discord`, `facebook`, `flickr`, `foursquare`, `goodreads`, `instagram`, `keybase`, `lastfm`, `pinterest`, `soundcloud`, `steam`, `telegram`, `threads`, `tumblr`, `weibo`, `wikipedia`, `xing`, `youtube`, `zhihu`
 
 ---
 
