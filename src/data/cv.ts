@@ -95,6 +95,11 @@ export const internships: InternshipItem[] = [
 
 export const honors: HonorItem[] = [
   {
+    period: '2026 – 2027',
+    title: 'Walmart Fellowship',
+    institution: 'IIT Bombay',
+  },
+  {
     period: '2025 – 2026',
     title: 'Mirae Asset Foundation Scholarship',
     institution: 'IIT Bombay',
