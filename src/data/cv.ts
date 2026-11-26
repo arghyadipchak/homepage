@@ -45,17 +45,17 @@ export const education: EducationItem[] = [
   {
     period: 'July 2024 – Present',
     institution: 'Indian Institute of Technology Bombay',
-    degree: 'Master of Science by Research, Computer Science & Engineering',
+    degree: 'Master of Science by Research, Computer Science and Engineering',
     advisor: '[Prof. Mythili Vutukuru](https://www.cse.iitb.ac.in/~mythili/)',
   },
   {
-    period: 'July 2022 – May 2024',
+    period: 'August 2022 – June 2024',
     institution: 'Chennai Mathematical Institute',
     degree: 'Master of Science, Computer Science',
     advisor: '[Prof. Prajakta Nimbhorkar](https://www.cmi.ac.in/~prajakta/)',
   },
   {
-    period: 'July 2019 – May 2022',
+    period: 'July 2019 – June 2022',
     institution: 'Indian Statistical Institute, Bangalore Centre',
     degree: 'Bachelor of Mathematics (Honours)',
   },

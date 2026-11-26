@@ -5,3 +5,7 @@ timeline: Jan – May 2025
 venue: 'R&D Project | Advisor: [Prof. Mythili Vutukuru](https://www.cse.iitb.ac.in/~mythili/), IIT Bombay'
 pdf_url: https://cdn.arghyac.com/iitb/rnd2-report.pdf
 ---
+
+## Highlights
+
+- Extended MobileInsight's 5G NR support by reverse engineering undocumented Qualcomm diagnostic messages
